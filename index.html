@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Crop Care System</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0e6ff;
+      text-align: center;
+      padding: 25px 15px;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      max-width: 480px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px #d3c1ed;
+    }
+    h1 { color: #7042a3; }
+    h3 { color: #8959bd; margin-bottom: 12px; }
+    p { color: #76658a; }
+    label { display: block; color: #55416b; margin-top: 12px; }
+    input, select {
+      display: block;
+      padding: 11px;
+      width: 100%;
+      margin: 8px auto;
+      border: 1px solid #cbb8e5;
+      border-radius: 8px;
+      background: #faf7ff;
+      font-size: 16px;
+    }
+    button {
+      background: #8959bd;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 16px;
+    }
+    button:hover { background: #7042a3; }
+    #result {
+      background: #f5efff;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+      text-align: left;
+      line-height: 1.8;
+      color: #55416b;
+      min-height: 60px;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>🌱 Smart Crop Care System</h1>
+    <p>Precision Farming and Plant Monitoring</p>
+
+    <h3>Enter Soil Information</h3>
+    <label for="moisture">Soil Moisture (%)</label>
+    <input type="number" id="moisture" placeholder="Example: 25" min="0" max="100">
+
+    <h3>Nutrient Levels</h3>
+    <label for="n">Nitrogen</label>
+    <select id="n">
+      <option value="normal">Normal</option>
+      <option value="low">Low</option>
+      <option value="high">High</option>
+    </select>
+
+    <label for="p">Phosphorus</label>
+    <select id="p">
+      <option value="normal">Normal</option>
+      <option value="low">Low</option>
+      <option value="high">High</option>
+    </select>
+
+    <label for="k">Potassium</label>
+    <select id="k">
+      <option value="normal">Normal</option>
+      <option value="low">Low</option>
+      <option value="high">High</option>
+    </select>
+
+    <button type="button" onclick="checkPlant()">Check Crop Health 🌿</button>
+
+    <div id="result" aria-live="polite">Your plant care advice will appear here!</div>
+  </main>
+
+  <script>
+    function checkPlant() {
+      const moistureInput = document.getElementById("moisture").value;
+      const moisture = Number(moistureInput);
+      const n = document.getElementById("n").value;
+      const p = document.getElementById("p").value;
+      const k = document.getElementById("k").value;
+      const result = document.getElementById("result");
+
+      if (moistureInput.trim() === "" || !Number.isFinite(moisture) || moisture < 0 || moisture > 100) {
+        result.textContent = "Please enter a valid moisture value between 0 and 100.";
+        return;
+      }
+
+      const advice = [];
+      if (moisture < 30) {
+        advice.push("💧 Soil is dry. Water your plant and check again.");
+      } else if (moisture <= 70) {
+        advice.push("✅ Soil moisture is suitable. No watering needed now.");
+      } else {
+        advice.push("⚠️ Soil is very wet. Avoid watering for now.");
+      }
+
+      const nutrients = [n, p, k];
+      if (nutrients.includes("low")) {
+        advice.push("🌿 A nutrient level is low. Check your soil test and consider suitable fertilizer.");
+      }
+      if (nutrients.includes("high")) {
+        advice.push("⚠️ A nutrient level is high. Do not add more fertilizer.");
+      }
+      if (nutrients.every(level => level === "normal")) {
+        advice.push("🌱 Nutrient levels are normal. No extra fertilizer is needed based on these readings.");
+      }
+      advice.push("Keep observing your plant every day!");
+
+      result.replaceChildren();
+      advice.forEach(message => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = message;
+        result.appendChild(paragraph);
+      });
+    }
+  </script>
+</body>
+</html>
